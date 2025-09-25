@@ -1,5 +1,8 @@
 // Seleciona os elementos
 const postsList = document.querySelector('.posts');
+const form = document.querySelector('.form-section form');
+const urlInput = document.querySelector('#url-input');
+const categoryInput = document.querySelector('#category-input');
 
 // Busca e Renderiza os posts
 async function fetchPosts() {
@@ -39,3 +42,54 @@ async function fetchPosts() {
 }
 
 fetchPosts();
+
+// Valida dados do formulário e os envia para o servidor
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const url = urlInput.value;
+    const categoria = categoryInput.value;
+
+    let msgError = '';
+
+    if(!url) {
+        msgError = 'Por favor, insira uma URL válida.';
+        const msgErrorElement = document.createElement('span');
+        msgErrorElement.classList.add('msg-error');
+
+        msgErrorElement.textContent = msgError;
+
+        return;
+    }
+
+    const newPost = {
+        url: url,
+        categoria: categoria
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/posts', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newPost),
+        });
+
+        if(!response.ok) {
+            throw new Error('Falha ao salvar o post/link.');
+        }
+
+        urlInput.value = '';
+        categoryInput.value = '';
+
+        await fetchPosts();
+    } catch(error) {
+        console.log('Erro ao salvar post/link: ', error);
+        msgError = 'Não foi possível adicionar o post. Tente novamente.';
+        const msgErrorElement = document.createElement('span');
+        msgErrorElement.classList.add('msg-error');
+
+        msgErrorElement.textContent = msgError;
+    }
+})
