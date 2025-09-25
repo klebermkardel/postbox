@@ -86,6 +86,27 @@ app.post('/posts', (req, res) => {
     });
 });
 
+// Rota para deletar posts
+app.delete('/posts/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM posts WHERE id = ?';
+
+    db.run(sql, id, function(err) {
+        if(err) {
+            res.status(500).json({ "error": res.message });
+            return;
+        }
+
+        if(this.changes === 0) {
+            res.status({ "error": "Post não encontrado." });
+            return;
+        }
+
+        res.json({ "message": `Post ${id} foi deletado com sucesso.` })
+    })
+})
+
 // Inicia o servidor e o faz escutar na porta definida
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}. . Acesse em http://localhost:${PORT}`)
