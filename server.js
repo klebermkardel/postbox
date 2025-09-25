@@ -7,11 +7,32 @@ const app = express();
 // Porta do Servidor
 const PORT = 3000;
 
-// ROTA PRINCIPAL
+// --- MIDDLEWARES ---
+// Middleware para o Express entender JSON.
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('<h1>API no ar!</h1>')  
-})
+// --- CONFIGURAÇÃO DO BANCO DE DADOS ---
+// Conecta ao arquivo do banco de dados
+const db = new sqlite3.Database('./database.db', (err) => {
+    if(err) {
+        console.error("Erro ao abrir o banco de dados", err.message);
+    } else {
+        console.log("Conectado ao banco de dados SQLite.");
+        // Cria a tabela 'posts' se ela não existir
+        db.run(`CREATE TABLE IF NOT EXISTS posts (
+            id INTERGER PRIMARY KEY AUTOINCREMENT,
+            url TEXT NOT NULL,
+            categoria TEXT,
+            foi_consumido BOOLEAN DEFAULT 0,
+            data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
+        )`);
+    }
+});
+
+
+
+// --- ROTAS DA API ---
+
 
 // Inicia o servidor e o faz escutar na porta definida
 app.listen(PORT, () => {
