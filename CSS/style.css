@@ -23,6 +23,10 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+main h1 {
+    margin-bottom: 30px;
+}
+
 /* Formulário */
 
 .form-section {
@@ -39,6 +43,11 @@ main {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.url-label, .category-label {
+    font-weight: 500;
+    font-size: 18px;
 }
 
 input[type="url"], input[type="text"] {
