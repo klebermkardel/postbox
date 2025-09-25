@@ -34,6 +34,23 @@ const db = new sqlite3.Database('./database.db', (err) => {
 
 // --- ROTAS DA API ---
 
+// Rota GET para buscar TODOS os posts
+app.get('/posts', (req, res) => {
+  const sql = "SELECT * FROM posts ORDER BY data_criacao DESC"; // Pega todos os posts, os mais novos primeiro
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      // Se der erro no banco de dados, envia uma resposta de erro
+      res.status(500).json({ "error": err.message });
+      return;
+    }
+    // Se tudo der certo, envia os 'rows' (as linhas/posts) como resposta JSON
+    res.json({
+      "message": "success",
+      "data": rows
+    });
+  });
+});
 
 // Inicia o servidor e o faz escutar na porta definida
 app.listen(PORT, () => {
