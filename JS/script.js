@@ -13,7 +13,7 @@ async function fetchPosts() {
         const result = await response.json();
         const posts = result.data;
 
-        postsList.forEach(post => {
+        posts.forEach(post => {
             const postElement = document.createElement('li');
             postElement.classList.add('post');
 
