@@ -1,6 +1,7 @@
-// Importa Express e o sqlite3
+// Importa pacotes e dependências necessárias
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 
 // Cria instância do Express
 const app = express();
@@ -9,7 +10,7 @@ const app = express();
 const PORT = 3000;
 
 // --- MIDDLEWARES ---
-// Middleware para o Express entender JSON.
+app.use(cors());
 app.use(express.json());
 
 // --- CONFIGURAÇÃO DO BANCO DE DADOS ---
