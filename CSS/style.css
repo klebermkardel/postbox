@@ -64,3 +64,48 @@ input[type="url"], input[type="text"] {
 #save-button:hover {
     background-color: #0056b3;
 }
+
+/* Lista de Posts */
+
+.list-posts-title {
+    margin-bottom: 20px;
+}
+
+.posts {
+    list-style: none;
+    padding: 0;
+}
+
+.post {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+}
+
+.post .category {
+    background-color: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.action-buttons button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.delete-button {
+    background-color: #dc3545 !important;
+    color: #ccc;
+}
