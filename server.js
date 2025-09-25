@@ -21,7 +21,7 @@ const db = new sqlite3.Database('./database.db', (err) => {
         console.log("Conectado ao banco de dados SQLite.");
         // Cria a tabela 'posts' se ela não existir
         db.run(`CREATE TABLE IF NOT EXISTS posts (
-            id INTERGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             url TEXT NOT NULL,
             categoria TEXT,
             foi_consumido BOOLEAN DEFAULT 0,
