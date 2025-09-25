@@ -105,7 +105,52 @@ app.delete('/posts/:id', (req, res) => {
 
         res.json({ "message": `Post ${id} foi deletado com sucesso.` })
     })
-})
+});
+
+// Rota para atualizar um post existente pelo ID
+app.patch('/postS/:id', (req, res) => {
+    const { id } = req.params;
+    const { url, categoria, foi_consumido } = req.body;
+
+    let fields = [];
+    let params = [];
+
+    if(url !== undefined) {
+        fields.push("url = ?");
+        params.push(url);
+    }
+    if (categoria !== undefined) {
+        fields.push("categoria = ?");
+        params.push(categoria);
+    }
+    if (foi_consumido !== undefined) {
+        fields.push("foi_consumido = ?");
+        params.push(foi_consumido);
+    }
+
+    if(fields.length === 0) {
+        return res.status(400).json({ "error": "Nenhum campo para atualizar foi fornecido." });
+    }
+
+    params.push(id);
+
+    const sql = `UPDATE posts SET ${fields.join(", ")} WHERE id = ?`;
+
+    db.run(sql, params, function(err) {
+        if(err) {
+            res.status(500).json({ "error": err.message });
+            return;
+        }
+        if(this.changes === 0) {
+            res.status(404).json({ "error": "Post não encontrado" });
+            return;
+        }
+        res.json({
+            message: `Post com ID ${id} foi atualizado com sucesso.`,
+            changes: this.changes
+        });
+    });
+});
 
 // Inicia o servidor e o faz escutar na porta definida
 app.listen(PORT, () => {
