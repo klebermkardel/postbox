@@ -34,6 +34,11 @@ const db = new sqlite3.Database('./database.db', (err) => {
 
 // --- ROTAS DA API ---
 
+// Rota principal 
+app.get('/', (req, res) => {
+  res.send('<h1>A API do PostBox está funcionando!</h1>');
+});
+
 // Rota GET para buscar TODOS os posts
 app.get('/posts', (req, res) => {
   const sql = "SELECT * FROM posts ORDER BY data_criacao DESC"; // Pega todos os posts, os mais novos primeiro
@@ -53,9 +58,6 @@ app.get('/posts', (req, res) => {
 });
 
 // Rota para adicionar um novo post
-app.get('/', (req, res) => {
-  res.send('<h1>A API do PostBox está funcionando!</h1>');
-});
 
 app.post('/posts', (req, res) => {
     const { url, categoria } = req.body;
