@@ -13,21 +13,25 @@ async function fetchPosts() {
         const result = await response.json();
         const posts = result.data;
 
-        posts.forEach(post => {
-            const postElement = document.createElement('li');
-            postElement.classList.add('post');
+        if(posts.length === 0) {
+            postsList.innerHTML = '<p>Não há nenhum Post ou Link salvo no momento.</p>'
+        } else {
+            posts.forEach(post => {
+                const postElement = document.createElement('li');
+                postElement.classList.add('post');
 
-            postElement.innerHTML = `
-                <a href="${post.url}" target="_blank" class="link-post">${post.url}</a>
-                <span class="category">${post.categoria}</span>
-                <div class="action-buttons">
-                    <button class="checked-button">Marcar como lido</button>
-                    <button class="delete-button">Excluir</button>
-                </div>
-            `;
+                postElement.innerHTML = `
+                    <a href="${post.url}" target="_blank" class="link-post">${post.url}</a>
+                    <span class="category">${post.categoria}</span>
+                    <div class="action-buttons">
+                        <button class="checked-button">Marcar como lido</button>
+                        <button class="delete-button">Excluir</button>
+                    </div>
+                `;
 
-            postsList.appendChild(postElement);
-        })
+                postsList.appendChild(postElement);
+            })
+        }
     } catch(error) {
         console.error('Falha ao buscar posts:', error);
         postsList.innerHTML = '<li>Falha ao carregar os posts. Tente novamente mais tarde.</li>';
