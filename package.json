@@ -1,0 +1,16 @@
+{
+  "name": "postbox",
+  "version": "1.0.0",
+  "description": "Um agregador de links simples para organizar e categorizar posts salvos de redes sociais e artigos da web. Feito com HTML, CSS, JavaScript puro, Node.js e Express.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
