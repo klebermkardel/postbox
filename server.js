@@ -52,6 +52,38 @@ app.get('/posts', (req, res) => {
   });
 });
 
+// Rota para adicionar um novo post
+app.get('/', (req, res) => {
+  res.send('<h1>A API do PostBox está funcionando!</h1>');
+});
+
+app.post('/posts', (req, res) => {
+    const { url, categoria } = req.body;
+
+    if(!url) {
+        return res.status(400).json({ "error": "O campo URL é obrigatório." });
+    }
+
+    const sql = `INSERT INTO posts (url, categoria) VALUES (?, ?)`;
+    const params = [url, categoria];
+
+    db.run (sql, params, function(err) {
+        if(err) {
+            res.status(500).json({ "error": err.message });
+            return;
+        }
+
+        res.status(201).json({
+            "message": "success",
+            "data": {
+                id: this.lastID,
+                url: url,
+                categoria: categoria
+            }
+        });
+    });
+});
+
 // Inicia o servidor e o faz escutar na porta definida
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}. . Acesse em http://localhost:${PORT}`)
