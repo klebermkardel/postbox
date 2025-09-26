@@ -22,6 +22,7 @@ async function fetchPosts() {
             posts.forEach(post => {
                 const postElement = document.createElement('li');
                 postElement.classList.add('post');
+                postElement.dataset.id = post.id;
 
                 postElement.innerHTML = `
                     <a href="${post.url}" target="_blank" class="link-post">${post.url}</a>
@@ -85,11 +86,43 @@ form.addEventListener('submit', async (e) => {
 
         await fetchPosts();
     } catch(error) {
-        console.log('Erro ao salvar post/link: ', error);
+        console.error('Erro ao salvar post/link: ', error);
         msgError = 'Não foi possível adicionar o post. Tente novamente.';
         const msgErrorElement = document.createElement('span');
         msgErrorElement.classList.add('msg-error');
 
         msgErrorElement.textContent = msgError;
+    }
+})
+
+// Evento para botão 'delete-button' excluir um post/link
+postsList.addEventListener('click', async (e) => {
+    if(e.target.classList.contains('delete-button')) {
+        const isConfirmed = confirm('Tem certeza que deseja excluir este Post/Link?');
+
+        if(isConfirmed) {
+            const postElement = e.target.closest('.post');
+            if (!postElement) return;
+            const postId= postElement.dataset.id;
+
+            try {
+                const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+                    method: 'DELETE',
+                });
+
+                if(!response.ok) {
+                    throw new Error('Falha ao deletar Post/Link.');
+                }
+
+                postElement.remove();
+            } catch(error) {
+                console.error('Erro ao deletar post:', error);
+                msgError = 'Não foi possível deletar o Post/Link. Tente novamente.';
+                const msgErrorElement = document.createElement('span');
+                msgErrorElement.classList.add('msg-error');
+
+                msgErrorElement.textContent = msgError;
+            }
+        }
     }
 })
