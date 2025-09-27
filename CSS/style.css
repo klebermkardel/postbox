@@ -118,3 +118,12 @@ input[type="url"], input[type="text"] {
     background-color: #dc3545;
     color: #ccc;
 }
+
+.post.consumed {
+  opacity: 0.5; /* Deixa o card semi-transparente */
+  background-color: #f8f9fa; /* Um fundo um pouco diferente */
+}
+
+.post.consumed .link-post {
+  text-decoration: line-through; /* Tacha o texto do link */
+}

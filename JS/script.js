@@ -24,6 +24,11 @@ async function fetchPosts() {
                 postElement.classList.add('post');
                 postElement.dataset.id = post.id;
 
+                // Se o post/link já foi consumido, adiciona a classe 'consumed'
+                if(post.foi_consumido) {
+                    postElement.classList.add('consumed');
+                }
+
                 postElement.innerHTML = `
                     <a href="${post.url}" target="_blank" class="link-post">${post.url}</a>
                     <span class="category">${post.categoria}</span>
@@ -123,6 +128,35 @@ postsList.addEventListener('click', async (e) => {
 
                 msgErrorElement.textContent = msgError;
             }
+        }
+    } else if(e.target.classList.contains('checked-button')) {
+        const postElement = e.target.closest('.post');
+        if(!postElement) return;
+
+        const postId = postElement.dataset.id;
+        const newConsumedState = !postElement.classList.contains('consumed');
+
+        try {
+            const response = await fetch(`http://localhost:3000/posts/${postId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ foi_consumido: newConsumedState }),
+            });
+
+            if(!response.ok) {
+                throw new Error('Falha ao atualizar o Post/Link.');
+            }
+
+            postElement.classList.toggle('consumed');
+        } catch(error) {
+            console.error('Erro ao atualizar o post:', error);
+            msgError = 'Não foi possível atualizar o Post/Link.';
+            const msgErrorElement = document.createElement('span');
+            msgErrorElement.classList.add('msg-error');
+
+            msgErrorElement.textContent = msgError;
         }
     }
 })
