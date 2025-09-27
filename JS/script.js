@@ -3,6 +3,7 @@ const postsList = document.querySelector('.posts');
 const form = document.querySelector('.form-section form');
 const urlInput = document.querySelector('#url-input');
 const categoryInput = document.querySelector('#category-input');
+const notificationContainer = document.querySelector('#notification-container');
 
 // Busca e Renderiza os posts
 async function fetchPosts() {
@@ -56,15 +57,8 @@ form.addEventListener('submit', async (e) => {
     const url = urlInput.value;
     const categoria = categoryInput.value;
 
-    let msgError = '';
-
     if(!url) {
-        msgError = 'Por favor, insira uma URL válida.';
-        const msgErrorElement = document.createElement('span');
-        msgErrorElement.classList.add('msg-error');
-
-        msgErrorElement.textContent = msgError;
-
+        showNotification('Por favor, insira uma URL válida.');
         return;
     }
 
@@ -92,11 +86,7 @@ form.addEventListener('submit', async (e) => {
         await fetchPosts();
     } catch(error) {
         console.error('Erro ao salvar post/link: ', error);
-        msgError = 'Não foi possível adicionar o post. Tente novamente.';
-        const msgErrorElement = document.createElement('span');
-        msgErrorElement.classList.add('msg-error');
-
-        msgErrorElement.textContent = msgError;
+        showNotification('Não foi possível salvar o Post/Link. Tente novamente.');
     }
 })
 
@@ -122,11 +112,7 @@ postsList.addEventListener('click', async (e) => {
                 postElement.remove();
             } catch(error) {
                 console.error('Erro ao deletar post:', error);
-                msgError = 'Não foi possível deletar o Post/Link. Tente novamente.';
-                const msgErrorElement = document.createElement('span');
-                msgErrorElement.classList.add('msg-error');
-
-                msgErrorElement.textContent = msgError;
+                showNotification('Não foi possível deletar o Post/Link. Tente novamente.');
             }
         }
     } else if(e.target.classList.contains('checked-button')) {
@@ -152,11 +138,23 @@ postsList.addEventListener('click', async (e) => {
             postElement.classList.toggle('consumed');
         } catch(error) {
             console.error('Erro ao atualizar o post:', error);
-            msgError = 'Não foi possível atualizar o Post/Link.';
-            const msgErrorElement = document.createElement('span');
-            msgErrorElement.classList.add('msg-error');
-
-            msgErrorElement.textContent = msgError;
+            showNotification('Não foi possível atualizar o Post/Link.');
         }
     }
 })
+
+// Função reutilizável para mostrar notificações/erros
+function showNotification(message, isError = true) {
+    notificationContainer.innerHTML = '';
+
+    const notificationElement = document.createElement('p');
+    notificationElement.textContent = message;
+
+    notificationElement.className = isError ? 'msg-error' : 'msg-success';
+
+    notificationContainer.appendChild(notificationElement);
+
+    setTimeout(() => {
+        notificationElement.remove();
+    }, 3000);
+}
